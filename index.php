@@ -13,6 +13,7 @@
     $username = "yasser";
     $password = "web@1223";
     $dbname = "art";
+    $table_name = "artworks";
 
     // Create connection
     $conn = new mysqli($servername, $username, $password, $dbname);
@@ -22,18 +23,31 @@
         die("Connection failed: " . $conn->connect_error);
     }
 
-    $sql = "SHOW TABLES";
+    // Query to select all rows from the table
+    $sql = "SELECT * FROM $table_name";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
-        echo "<h2>Tables in the Database:</h2>";
-        echo "<ul>";
-        while ($row = $result->fetch_assoc()) {
-            echo "<li>" . $row['Tables_in_' . $dbname] . "</li>";
+        echo "<h2>Contents of Table $table_name:</h2>";
+        echo "<table border='1'>";
+        // Display header row
+        echo "<tr>";
+        while ($field = $result->fetch_field()) {
+            echo "<th>{$field->name}</th>";
         }
-        echo "</ul>";
+        echo "</tr>";
+
+        // Display data rows
+        while ($row = $result->fetch_assoc()) {
+            echo "<tr>";
+            foreach ($row as $value) {
+                echo "<td>$value</td>";
+            }
+            echo "</tr>";
+        }
+        echo "</table>";
     } else {
-        echo "No tables found.";
+        echo "No data found in table $table_name.";
     }
 
     $conn->close();

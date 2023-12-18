@@ -25,7 +25,18 @@
 
     // Query to select all rows from the table
     $sql = "SELECT * FROM $table_name";
+    
+    // Debugging: Output the SQL query
+    echo "SQL Query: $sql<br>";
+
     $result = $conn->query($sql);
+
+    // Debugging: Output the result of the query
+    var_dump($result);
+
+    if (!$result) {
+        die("Error executing query: " . $conn->error);
+    }
 
     if ($result->num_rows > 0) {
         echo "<h2>Contents of Table $table_name:</h2>";
